@@ -9,7 +9,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 questionData = pd.read_csv("ques_data.csv")
-#print(questionData)
+print questionData
 for i in questionData.index:
     question = Question()
     question.correct = questionData['correct'][i]

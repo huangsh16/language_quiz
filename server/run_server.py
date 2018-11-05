@@ -13,8 +13,7 @@ app = Flask(__name__)
 engine = create_engine('sqlite:///language_data.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
-session = scoped_session(DBSession)
-#session = DBSession()
+session = DBSession()
 
 NUMWORDTEST = 20
 NUMRAVENTEST = 8
@@ -80,7 +79,7 @@ def func_weight(times_used):
     elif times_used >= 3:
         return 1
     else:
-        print('wrong times_used', times_used)
+        print 'wrong times_used', times_used
         return 0
 
 
@@ -89,7 +88,7 @@ def func_weight(times_used):
 # wi: the weight to choose xi
 def func_roulette(x, w):
     if len(x) != len(w) or len(x) <= 0:
-        print('wrong roulette x')
+        print 'wrong roulette x'
         return -1
 
     length = len(x)
@@ -202,7 +201,7 @@ def kid_info_submit():
         session.add(newchild)
         session.commit()
         # 数据入库
-        print("create a new child, id = ", newchild.id, newchild.age)
+        print "create a new child, id = ", newchild.id, newchild.age
 
         return render_template('selection_before.html',
                                childID=newchild.id)
@@ -225,11 +224,11 @@ def sel_begin():
         if (request.args.get('childID') == None):
             return render_template('index.html')
         childID = int(request.args.get('childID'))
-        print('childID: ', childID)
+        print 'childID: ', childID
         # 挑选问题
         questionID, num_ans = newWordTestQuestionID(childID)
         if num_ans != 0:
-            print('wrong num_ans')
+            print 'wrong num_ans'
         question = session.query(Question).filter_by(id=questionID).one()
 
         return render_template('selection_test.html',
@@ -257,10 +256,10 @@ def addTestResult(testClass, childID, questionID, answer, time_this):
         record.date = str(time.time())
         session.add(record)
         session.commit()
-        print('new record')
+        print 'new record'
         return 1
     else:
-        print('record existed')
+        print 'record existed'
         return 0
 
 
@@ -293,14 +292,14 @@ def sel_test():
             # 更新question计数， 更新child的答题缓存
             question.times_used = question.times_used + 1
 
-            print('wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, time:{}, num_ans:{}'.format(
+            print 'wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, time:{}, num_ans:{}'.format(
                 childID,
                 questionID,
                 question.level,
                 question.correct,
                 answer,
                 time,
-                child.num_word_test))
+                child.num_word_test)
             session.add(child)
             session.add(question)
             session.commit()
@@ -310,7 +309,7 @@ def sel_test():
         # 分配下一个questionID，通过和答题记录对比验证答题数量
         questionID, num_ans_examine = newWordTestQuestionID(childID)
         if child.num_word_test != num_ans_examine:
-            print('wrong num_ans')
+            print 'wrong num_ans'
         question = session.query(Question).filter_by(id=questionID).one()
 
         return render_template('selection_test.html',
@@ -341,9 +340,9 @@ def predAgeWordTest(childID):
         num_ans = num_ans + 1
 
     if num_ans != NUMWORDTEST:
-        print('wrong num_ans in func predAge')
+        print 'wrong num_ans in func predAge'
 
-    print("id={}, num_correct={}, pred_age={}".format(childID, num_correct, age))
+    print "id={}, num_correct={}, pred_age={}".format(childID, num_correct, age)
 
     return age
 
@@ -352,7 +351,7 @@ def predAgeWordTest(childID):
 @app.route('/sel_result', methods=['POST', 'GET'])
 def sel_result():
     if request.method == 'GET':
-        print("word test over")
+        print "word test over"
         # 获取信息
 
         if (request.args.get('childID') == None or request.args.get('questionID') == None):
@@ -376,12 +375,12 @@ def sel_result():
             # 更新question计数
             question.times_used = question.times_used + 1
 
-            print('wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, num_ans:{}'.format(
-                childID, questionID, question.level, question.correct, answer, num_ans))
+            print 'wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, num_ans:{}'.format(
+                childID, questionID, question.level, question.correct, answer, num_ans)
 
             # 结束标志
             if num_ans != NUMWORDTEST:
-                print('wrong num total word test')
+                print 'wrong num total word test'
 
             # 预测
             child.pred_age = predAgeWordTest(childID)
@@ -485,7 +484,7 @@ def raven_test():
 @app.route('/raven_result', methods=['POST', 'GET'])
 def raven_result():
     if request.method == 'GET':
-        print("raven test over")
+        print "raven test over"
         # 获取记录
         if (request.args.get('childID') == None or request.args.get('questionID') == None):
             return render_template('index.html')
@@ -499,22 +498,22 @@ def raven_result():
             pass
 
         if NUMRAVENTEST != questionID:
-            print("wrong num of raven questions!")
+            print "wrong num of raven questions!"
 
         # 计算正确率
         records = session.query(RavenTest).filter_by(childID=childID)
         num_correct = 0
         num_ans = 0
         for record in records:
-            print(record.answer)
+            print record.answer
             if int(record.answer) == RAVEN_ANS[record.questionID]:
                 num_correct = num_correct + 1
             num_ans = num_ans + 1
 
         if num_ans != NUMRAVENTEST:
-            print('wrong num_ans in raven result')
+            print 'wrong num_ans in raven result'
 
-        print(num_correct)
+        print num_correct
         correct_ratio = float(int(num_correct * 1000 / NUMRAVENTEST)) / 10.0
 
         return render_template('raven_result.html', ratio=correct_ratio)
