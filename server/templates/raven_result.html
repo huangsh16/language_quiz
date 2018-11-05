@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>瑞文测试结果</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 15px; text-align: center">
+                <h4>您的孩子的瑞文测试正确率为：</h4>
+                <h1>{{ratio}}%</h1>
+                <br>
+                <h4 align="left">参考数据：</h4>
+                <h4 align="left">在完整的瑞文推理量表中，<br>各年龄段儿童测试成绩的<b>中位数</b>为：</h4>
+                <h4 align="left">5.5周岁：27%</h4>
+                <h4 align="left">6周岁：28%</h4>
+                <h4 align="left">6.5周岁：30%</h4>
+                <h4 align="left">7周岁：32%</h4>
+                <br>
+                <h4>点击"继续"，<br>进一步进行认知能力测试。</h4>
+                <br>
+                <div align="center">
+                    <button type="button" onclick="javascript:begin();" class="btn btn-default btn-lg">继续</button>
+                </div>
+                <br>
+
+            </div>
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+    });
+
+    begin = function () {
+        var form = document.createElement('form');
+        form.action = '/memory_before';
+        form.target = '_self';
+        form.method = 'get';
+
+        var opt = document.createElement('input');
+        opt.name = 'childID';
+        opt.value = $.cookie('childID');
+        form.appendChild(opt);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</body>
+</html>

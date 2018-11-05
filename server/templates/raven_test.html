@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>瑞文推理测试</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/info.css" rel="stylesheet">
+    <style>
+        table {
+            border-spacing: 10px;
+            border-collapse: separate;
+        }
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 20px;">
+                <h4 align="center">请选择你认为正确的图片填在空缺处。</h4>
+                <br>
+                <div align="center">
+                    <img id="Q" src="static/resource/raven_img/{{ques_letter}}_Q.png" width="200">
+                </div>
+                <br>
+
+                <form class="form-horizontal" id="information" method="post" action="/begin">
+                    <div align="center">
+                        <table cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>
+                                    <a onclick="javascript:begin(1);">
+                                        <img id="1" src="static/resource/raven_img/{{ques_letter}}_1.png" width="150" style="cursor: pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(2);">
+                                        <img id="2" src="static/resource/raven_img/{{ques_letter}}_2.png" width="150" style="cursor: pointer"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(3);">
+                                        <img id="3" src="static/resource/raven_img/{{ques_letter}}_3.png" width="150" style="cursor:pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a onclick="javascript:begin(4);">
+                                        <img id="4" src="static/resource/raven_img/{{ques_letter}}_4.png" width="150" style="cursor: pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(5);">
+                                        <img id="5" src="static/resource/raven_img/{{ques_letter}}_5.png" width="150" style="cursor: pointer"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(6);">
+                                        <img id="6" src="static/resource/raven_img/{{ques_letter}}_6.png" width="150" style="cursor:pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br>
+                </form>
+            </div>
+            <br>
+
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<ques hidden>{{questionID}}</ques>
+<is_last hidden>{{isLastQuestion}}</is_last>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/iCheck/icheck.min.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    var timer = null;
+    var sec = 0, msec = 0;
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+        clearInterval(timer);
+        timer = setInterval(function () {
+            msec++;
+            if (msec == 100) {
+                sec += 1;
+                msec = 0;
+            }
+        }, 1000 / 100);
+    });
+
+    begin = function (option) {
+        var is_last = $('is_last').html();
+
+        var form = document.createElement('form');
+        form.action = '/raven_test';
+        if (is_last == '1') {
+            form.action = '/raven_result'
+        }
+        form.target = '_self';
+        form.method = 'get';
+
+        var opt = document.createElement('input');
+        opt.name = 'childID';
+        opt.value = $.cookie('childID');
+        form.appendChild(opt);
+
+        opt = document.createElement('input');
+        opt.name = 'questionID';
+        opt.value = $('ques').html();
+        form.appendChild(opt);
+
+        opt = document.createElement('input');
+        opt.name = 'answer';
+        opt.value = option;
+        form.appendChild(opt);
+
+        opt = document.createElement('input');
+        opt.name = 'time';
+        opt.value = sec + '.' + msec;
+        form.appendChild(opt);
+
+        document.body.appendChild(form);
+        form.submit();
+
+    }
+</script>
+</body>
+</html>

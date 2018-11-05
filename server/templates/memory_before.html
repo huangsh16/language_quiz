@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 4 工作记忆测试</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 20px; text-align: center">
+                <h3 align="center">Part 4 工作记忆测试</h3>
+                <br>
+                <h4>以下题目将测试孩子的工作记忆能力，</h4>
+                <h4>改编自心理学中常用的数字广度检验。</h4>
+                <br>
+                <h4>点击播放按钮后，</h4>
+                <h4>孩子将听到一个数字序列。</h4>
+                <h4>请记忆该序列，并填写在横线上。</h4>
+                <br>
+                <div align="center">
+                    <button type="button" onclick="begin();" class="btn btn-default btn-lg">开始测试
+                    </button>
+                </div>
+                <br>
+
+            </div>
+            <br>
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+    });
+
+    begin = function () {
+        var form = document.createElement('form');
+        form.action = '/memory_practice';
+        form.target = '_self';
+        form.method = 'get';
+
+        var opt = document.createElement('input');
+        opt.name = 'childID';
+        opt.value = $.cookie('childID');
+        form.appendChild(opt);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</body>
+</html>

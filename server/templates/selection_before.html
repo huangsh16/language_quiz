@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 2 词汇测试</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover">
+                <h3 align="center">Part 2 词汇测试</h3>
+                <br>
+                <h4 align="center">以下20道题请孩子作答。</h4>
+                <br>
+                <p align="left">每道题中，屏幕中央位置会出现一个单词，下方有4张图片。点击喇叭图标可以听到该单词的读音。请点击与单词对应的图片。</p>
+                <br>
+                <p align="left">年纪较小的孩子家长可以帮忙输入选择。在作答过程中，请家长让孩子自己做出选择。</p>
+                <br>
+                <p class="lead">
+                    <a href="javascript:begin();" class="btn btn-lg btn-default">开始测试</a>
+                </p>
+
+            </div>
+
+            <div class="mastfoot">
+                <div>
+                    <p style="text-align: center;">Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<child_id hidden>{{childID}}</child_id>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+       $.cookie('childID', $('child_id').html());
+    });
+
+    begin = function() {
+        var form = document.createElement('form');
+        form.action = '/sel_practice';
+        form.target = '_self';
+        form.method = 'get';
+
+        var opt = document.createElement('input');
+        opt.name = 'childID';
+        opt.value = $.cookie('childID');
+        form.appendChild(opt);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</body>
+</html>

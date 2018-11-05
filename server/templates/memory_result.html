@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>工作记忆测试结果</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/info.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 50px; text-align: center">
+                <h4>您家孩子的最长数字记忆长度为</h4>
+                <h1>{{length}}</h1>
+                <br>
+                <h5 align="left">参考：</h5>
+                <h5 align="left">普通成年人的记忆长度为7 ± 2</h5>
+                <br>
+                <h4>欢迎分享本测试到朋友圈！</h4>
+                <h4>快和其他小朋友比一比吧！</h4>
+                <br>
+
+            </div>
+            <br>
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+        $.removeCookie('childID');
+    });
+
+    begin = function () {
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>测试前的练习</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/vendor/layer/mobile/need/layer.css" rel="stylesheet">
+    <link href="static/vendor/buttons/buttons.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/info.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 30px;">
+                <h4 align="center">请选择与单词相匹配的图片。<br>点击喇叭图标进行朗读。</h4>
+                <h4 align="center"><br>本题为练习题，不计入成绩。</h4>
+                <div align="center">
+                    <h3 id="correct_word">cat</h3>
+                </div>
+                <div align="center">
+                    <button type="button" class="button button-3d button-pill" id="play_music">
+                        <span id="music_label" class="glyphicon glyphicon-play"></span>
+                    </button>
+                </div>
+                <br>
+                <audio id="music_src" src="static/resource/voice/cat.mp3" hidden>您的设备不支持audio标签播放。</audio>
+                <br>
+                <div>
+                    <div style="width: 100%;">
+                        <div class="row">
+                            <div class="col-xs-6 option" style="text-align: center">
+                                <a href="javascript:void(0)" onclick="submit(0);">
+                                    <img src="/static/resource/img/bus.jpg" class="img-rounded" height="110"
+                                         width="110">
+                                </a>
+                            </div>
+                            <div class="col-xs-6 option" style="text-align: center">
+                                <a href="javascript:void(0)" onclick="submit(1);">
+                                    <img src="/static/resource/img/cat.jpg" class="img-rounded" height="110"
+                                         width="110">
+                                </a>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 option" style="text-align: center">
+                                <a href="javascript:void(0)" onclick="submit(2);">
+                                    <img src="/static/resource/img/book.jpg" class="img-rounded" height="110"
+                                         width="110">
+                                </a>
+                            </div>
+                            <div class="col-xs-6 option" style="text-align: center">
+                                <a href="javascript:void(0)" onclick="submit(3);">
+                                    <img src="/static/resource/img/TV.jpg" class="img-rounded" height="110" width="110">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/layer/layer.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+        var audio = document.getElementById('music_src');
+        audio.addEventListener("loadeddata",
+            function () {
+                $('#music_label').attr();
+                $('#music_label').html('');
+            }, false);
+    });
+
+    $('#play_music').click(function () {
+        var audio = document.getElementById('music_src');
+        audio.play();
+    });
+
+    submit = function (sel) {
+
+        if (sel != 1) {
+            layer.msg('您选择了错误的答案！');
+        } else {
+            layer.msg('选择正确！马上开始正式测试。', {time: 2000}, function () {
+                var form = document.createElement('form');
+                form.action = '/sel_begin';
+                form.target = '_self';
+                form.method = 'get';
+
+                var opt = document.createElement('input');
+                opt.name = 'childID';
+                opt.value = $.cookie('childID');
+                form.appendChild(opt);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+    }
+</script>
+</body>
+</html>

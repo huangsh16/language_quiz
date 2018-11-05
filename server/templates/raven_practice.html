@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>瑞文推理练习</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/vendor/layer/mobile/need/layer.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/info.css" rel="stylesheet">
+    <style>
+        table {
+            border-spacing: 10px;
+            border-collapse: separate;
+        }
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="inner cover" style="padding-top: 20px;">
+                <h4 align="center">请选择你认为正确的图片填在空缺处。</h4>
+                <h4 align="center">这是一道练习题，不计入成绩。</h4>
+                <br>
+                <div align="center">
+                    <img id="Q" src="static/resource/raven_img/T_Q.png" width="200">
+                </div>
+                <br>
+
+                <form class="form-horizontal" id="information" method="post">
+                    <div align="center">
+                        <table cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>
+                                    <a onclick="javascript:begin(1);">
+                                        <img id="1" src="static/resource/raven_img/T_1.png" width="150"
+                                             style="cursor: pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(2);">
+                                        <img id="2" src="static/resource/raven_img/T_2.png" width="150"
+                                             style="cursor: pointer"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(3);">
+                                        <img id="3" src="static/resource/raven_img/T_3.png" width="150"
+                                             style="cursor:pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a onclick="javascript:begin(4);">
+                                        <img id="4" src="static/resource/raven_img/T_4.png" width="150"
+                                             style="cursor: pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(5);">
+                                        <img id="5" src="static/resource/raven_img/T_5.png" width="150"
+                                             style="cursor: pointer"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="javascript:begin(6);">
+                                        <img id="6" src="static/resource/raven_img/T_6.png" width="150"
+                                             style="cursor:pointer;"
+                                             class="img-thumbnail">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br>
+                </form>
+            </div>
+            <br>
+
+            <div style="color: rgba(255, 255, 255, .5);">
+                <div style="text-align: center;padding-bottom: 5px;">
+                    <p>Powered by <a href="http://cs.tsinghua.edu.cn">清华大学计算机系</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/vendor/jquery/jquery-1.11.3.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/vendor/layer/layer.js"></script>
+<script src="static/vendor/cookie/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+
+        if(typeof($.cookie('childID')) == 'undefined') {
+            window.location.href = '/';
+        }
+
+    });
+
+    begin = function (option) {
+
+        if (option == 5) {
+            layer.msg('选择正确！马上开始正式测试！', {time: 2000}, function () {
+                var form = document.createElement('form');
+                form.action = '/raven_begin';
+                form.target = '_self';
+                form.method = 'get';
+
+                var opt = document.createElement('input');
+                opt.name = 'childID';
+                opt.value = $.cookie('childID');
+                form.appendChild(opt);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        } else {
+            layer.msg('您选择了错误的答案！')
+        }
+
+
+    }
+</script>
+</body>
+</html>
