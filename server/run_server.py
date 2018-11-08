@@ -4,6 +4,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 from db_setup import Base, Question, Child, WordTest, RavenTest, MemoryTest
 import time
 import random
@@ -13,7 +14,7 @@ app = Flask(__name__)
 engine = create_engine('sqlite:///language_data.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
-session = DBSession()
+session = scoped_session(DBSession)
 
 NUMWORDTEST = 20
 NUMRAVENTEST = 8
