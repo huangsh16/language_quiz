@@ -476,7 +476,7 @@ def raven_test():
         if addTestResult(RavenTest, childID, questionID, answer, time) == 1:
             child.num_ans_raven = child.num_ans_raven + 1
             session.add(child)
-        	session.commit()
+            session.commit()
         print("reven_test after addTestResult" + str(child.num_ans_raven))
 
         return render_template('raven_test.html',
