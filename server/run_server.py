@@ -475,7 +475,10 @@ def raven_test():
         print("reven_test before addTestResult" + str(child.num_ans_raven))
         if addTestResult(RavenTest, childID, questionID, answer, time) == 1:
             child.num_ans_raven = child.num_ans_raven + 1
+            session.add(child)
+        	session.commit()
         print("reven_test after addTestResult" + str(child.num_ans_raven))
+
         return render_template('raven_test.html',
                                ques_letter=RAVEN_LETTER[child.num_ans_raven + 1],
                                questionID=child.num_ans_raven + 1,
