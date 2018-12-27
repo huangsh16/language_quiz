@@ -19,10 +19,12 @@ class Question(Base):
     wrong1 = Column(String(15), nullable=False)
     wrong2 = Column(String(15), nullable=False)
     wrong3 = Column(String(15), nullable=False)
-    level = Column(Integer, nullable=False)
+    #level = Column(Integer, nullable=False)
     age = Column(Integer, nullable=False)
-    fix = Column(Integer, nullable=False)
-    group = Column(Integer, nullable=False)
+    #fix = Column(Integer, nullable=False)
+    #group = Column(Integer, nullable=False)
+    priority = Column(Integer, nullable=False)
+    mode = Column(Integer, nullable=False)
     times_used = Column(Integer)
 
     def __init__(self):
@@ -37,7 +39,7 @@ class Question(Base):
             'wrong1': self.wrong1,
             'wrong2': self.wrong2,
             'wrong3': self.wrong3,
-            'level': self.level
+            #'level': self.level
 
         }
 
@@ -59,22 +61,43 @@ class Child(Base):
     edu7 = Column(Integer)
     time_info = Column(String(10))
 
-
-    level = Column(Integer)
+    #level = Column(Integer)
 
     # 上一个选择是否正确,正确为1,错误为-1,不存在为0
-    last = Column(Integer)
+    #last = Column(Integer)
     # 上上一个选择是否正确
-    llast = Column(Integer)
+    #llast = Column(Integer)
 
     # 目前最后回答的题目的group，用于产生新题
-    lgroup = Column(Integer)
+    #lgroup = Column(Integer)
+
+    # 上次回答的问题
+    last_question = Column(Integer)
+
+    # 回答正确的数目
+    correct_count = Column(Integer)
 
     # 目前回答的单词题目数
     num_word_test = Column(Integer)
 
+    # 级别
+    mode = Column(Integer)
+
     # 预测单词年龄
     pred_age = Column(Integer)
+
+    # 后10个问题的id
+    Q0 = Column(Integer)
+    Q1 = Column(Integer)
+    Q2 = Column(Integer)
+    Q3 = Column(Integer)
+    Q4 = Column(Integer)
+    Q5 = Column(Integer)
+    Q6 = Column(Integer)
+    Q7 = Column(Integer)
+    Q8 = Column(Integer)
+    Q9 = Column(Integer)
+
 
     # 几个详细调查的答案
     A11 = Column(String(10))
@@ -97,11 +120,14 @@ class Child(Base):
 
     def __init__(self):
         self.num_ans = 0
-        self.level = 1
-        self.last = 0
-        self.llast = 0
+        #self.level = 1
+        #self.last = 0
+        #self.llast = 0
         self.num_word_test = 0
-        self.lgroup = 0
+        self.correct_count = 0
+        #self.lgroup = 0
+        self.mode = -1
+        self.last_question = -1
         self.chance = 1
         self.num_ans_raven = 0
         self.memory = 3

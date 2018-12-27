@@ -27,6 +27,13 @@ RAVEN_LETTER = ['', 'A1', 'A5', 'A6', 'A7', 'A11', 'A12', 'B5', 'B12']
 MINMEMORY = 3
 MAXMEMORY = 16
 
+MODELIST = [1, 3, 6, 8, 10] 
+QCHOICE = [ [4, 3, 2, 1, 0],
+            [3, 3, 2, 1, 1],
+            [2, 2, 2, 2, 2],
+            [1, 1, 2, 3, 3],
+            [0, 1, 2, 3, 4]]
+
 '''
 以下为自定义路由
 '''
@@ -80,7 +87,7 @@ def func_weight(times_used):
     elif times_used >= 3:
         return 1
     else:
-        print 'wrong times_used', times_used
+        print('wrong times_used', times_used)
         return 0
 
 
@@ -89,7 +96,7 @@ def func_weight(times_used):
 # wi: the weight to choose xi
 def func_roulette(x, w):
     if len(x) != len(w) or len(x) <= 0:
-        print 'wrong roulette x'
+        print('wrong roulette x')
         return -1
 
     length = len(x)
@@ -104,7 +111,10 @@ def newWordTestQuestionID(childID):
     # 数据库查这个孩子
     child = session.query(Child).filter_by(id=childID).one()
 
+    print "newWordTestQuestionID"
+
     # 更新这个孩子的下题的level
+    '''
     if child.last + child.llast == 2:
         # 升级
         child.level = min(child.level + 1, MAXLEVEL)
@@ -124,6 +134,7 @@ def newWordTestQuestionID(childID):
     session.add(child)
     session.commit()
     ### 此后只访问，不更新数据库 ###
+    '''
 
     # 数据库查该孩子的答题记录
     records = session.query(WordTest).filter_by(childID=childID)
@@ -131,14 +142,60 @@ def newWordTestQuestionID(childID):
     # 累加该孩子的各题答题总数
     num_ans = 0
 
+    for record in records:
+        num_ans = num_ans + 1
+    
+    print(child.num_word_test, child.num_word_test // 2 + 1)
+
+    if child.num_word_test < 10 :
+        # 进入关键词测试 
+        mode = child.num_word_test // 2 + 1
+        print(mode)
+        questions = session.query(Question)
+        print(questions)
+        return 1, 0
+        
+        question = random.choice(questions)
+        while question.id == child.last_question :
+            question = random.choice(questions)
+        
+        return question.id, num_ans
+
+    else :
+        # 进入其他词测试
+        if child.num_word_test == 10 :
+            return child.Q0, num_ans
+        elif child.num_word_test == 11 :
+            return child.Q1, num_ans
+        elif child.num_word_test == 12 :
+            return child.Q2, num_ans
+        elif child.num_word_test == 13 :
+            return child.Q3, num_ans
+        elif child.num_word_test == 14 :
+            return child.Q4, num_ans
+        elif child.num_word_test == 15 :
+            return child.Q5, num_ans
+        elif child.num_word_test == 16 :
+            return child.Q6, num_ans
+        elif child.num_word_test == 17 :
+            return child.Q7, num_ans
+        elif child.num_word_test == 18 :
+            return child.Q8, num_ans
+        elif child.num_word_test == 19 :
+            return child.Q9, num_ans
+            
+
+
+
+
     # 找出目标级别答过的题
+    '''
     questionIDs_answered_this_level = []
     for record in records:
         num_ans = num_ans + 1
         question = session.query(Question).filter_by(id=record.questionID).one()
         if question.level == child.level:
             questionIDs_answered_this_level = questionIDs_answered_this_level + [question.id]
-
     # 该级别已经回答过的题目数量
     num_answered_this_level = len(questionIDs_answered_this_level)
 
@@ -176,6 +233,8 @@ def newWordTestQuestionID(childID):
     questionID = func_roulette(questionIDs_to_answer, weights)
 
     return questionID, num_ans
+    '''
+    
 
 
 # 提交信息，返回单词测试说明页，为远端分配childID
@@ -202,7 +261,7 @@ def kid_info_submit():
         session.add(newchild)
         session.commit()
         # 数据入库
-        print "create a new child, id = ", newchild.id, newchild.age
+        print("create a new child, id = ", newchild.id, newchild.age)
 
         return render_template('selection_before.html',
                                childID=newchild.id)
@@ -225,11 +284,11 @@ def sel_begin():
         if (request.args.get('childID') == None):
             return render_template('index.html')
         childID = int(request.args.get('childID'))
-        print 'childID: ', childID
+        print('childID: ', childID)
         # 挑选问题
         questionID, num_ans = newWordTestQuestionID(childID)
         if num_ans != 0:
-            print 'wrong num_ans'
+            print('wrong num_ans')
         question = session.query(Question).filter_by(id=questionID).one()
 
         return render_template('selection_test.html',
@@ -257,10 +316,10 @@ def addTestResult(testClass, childID, questionID, answer, time_this):
         record.date = str(time.time())
         session.add(record)
         session.commit()
-        print 'new record'
+        print('new record')
         return 1
     else:
-        print 'record existed'
+        print('record existed')
         return 0
 
 
@@ -286,21 +345,44 @@ def sel_test():
             # 更新该child已回答的数量， 近两次回答是否正确
             # last是上次，llast是上上次，1是正确，-1是错误
             child.num_word_test = child.num_word_test + 1
-            child.llast = child.last
-            child.last = 1 if answer == question.correct else -1
-            child.lgroup = question.group
+            #child.llast = child.last
+            #child.last = 1 if answer == question.correct else -1
+            #child.lgroup = question.group
+            if answer == question.correct :
+                child.correct_count += 1
+            child.last_question = question.id
+
+            if child.num_word_test == 10 :
+                # 恰好测试完关键词, 更新mode
+                for i in range(0, 5) :
+                    if correct_count <= MODELIST[i]:
+                        child.mode = i
+                        break
+                questions = []
+                for i in range(0, 5) : 
+                    questions.extend(random.sample(session.query(Question).filter_by(mode = i + 1).one(), QCHOICE[child.mode][i]))
+                child.Q0 = questions[0].id
+                child.Q1 = questions[1].id
+                child.Q2 = questions[2].id
+                child.Q3 = questions[3].id
+                child.Q4 = questions[4].id
+                child.Q5 = questions[5].id
+                child.Q6 = questions[6].id
+                child.Q7 = questions[7].id
+                child.Q8 = questions[8].id
+                child.Q9 = questions[9].id
 
             # 更新question计数， 更新child的答题缓存
             question.times_used = question.times_used + 1
 
-            print 'wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, time:{}, num_ans:{}'.format(
+            print('wordtest: childID:{}, questionID:{}, correct:{}, answer:{}, time:{}, num_ans:{}'.format(
                 childID,
                 questionID,
-                question.level,
+                #question.level,
                 question.correct,
                 answer,
                 time,
-                child.num_word_test)
+                child.num_word_test))
             session.add(child)
             session.add(question)
             session.commit()
@@ -310,7 +392,7 @@ def sel_test():
         # 分配下一个questionID，通过和答题记录对比验证答题数量
         questionID, num_ans_examine = newWordTestQuestionID(childID)
         if child.num_word_test != num_ans_examine:
-            print 'wrong num_ans'
+            print('wrong num_ans')
         question = session.query(Question).filter_by(id=questionID).one()
 
         return render_template('selection_test.html',
@@ -341,9 +423,9 @@ def predAgeWordTest(childID):
         num_ans = num_ans + 1
 
     if num_ans != NUMWORDTEST:
-        print 'wrong num_ans in func predAge'
+        print('wrong num_ans in func predAge')
 
-    print "id={}, num_correct={}, pred_age={}".format(childID, num_correct, age)
+    print("id={}, num_correct={}, pred_age={}".format(childID, num_correct, age))
 
     return age
 
@@ -352,7 +434,7 @@ def predAgeWordTest(childID):
 @app.route('/sel_result', methods=['POST', 'GET'])
 def sel_result():
     if request.method == 'GET':
-        print "word test over"
+        print("word test over")
         # 获取信息
 
         if (request.args.get('childID') == None or request.args.get('questionID') == None):
@@ -376,12 +458,12 @@ def sel_result():
             # 更新question计数
             question.times_used = question.times_used + 1
 
-            print 'wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, num_ans:{}'.format(
-                childID, questionID, question.level, question.correct, answer, num_ans)
+            print('wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, num_ans:{}'.format(
+                childID, questionID, question.level, question.correct, answer, num_ans))
 
             # 结束标志
             if num_ans != NUMWORDTEST:
-                print 'wrong num total word test'
+                print('wrong num total word test')
 
             # 预测
             child.pred_age = predAgeWordTest(childID)
@@ -489,7 +571,7 @@ def raven_test():
 @app.route('/raven_result', methods=['POST', 'GET'])
 def raven_result():
     if request.method == 'GET':
-        print "raven test over"
+        print("raven test over")
         # 获取记录
         if (request.args.get('childID') == None or request.args.get('questionID') == None):
             return render_template('index.html')
@@ -503,22 +585,22 @@ def raven_result():
             pass
 
         if NUMRAVENTEST != questionID:
-            print "wrong num of raven questions!"
+            print("wrong num of raven questions!")
 
         # 计算正确率
         records = session.query(RavenTest).filter_by(childID=childID)
         num_correct = 0
         num_ans = 0
         for record in records:
-            print record.answer
+            print(record.answer)
             if int(record.answer) == RAVEN_ANS[record.questionID]:
                 num_correct = num_correct + 1
             num_ans = num_ans + 1
 
         if num_ans != NUMRAVENTEST:
-            print 'wrong num_ans in raven result'
+            print('wrong num_ans in raven result')
 
-        print num_correct
+        print(num_correct)
         correct_ratio = float(int(num_correct * 1000 / NUMRAVENTEST)) / 10.0
 
         return render_template('raven_result.html', ratio=correct_ratio)

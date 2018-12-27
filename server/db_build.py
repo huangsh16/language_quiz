@@ -8,8 +8,8 @@ engine = create_engine('sqlite:///language_data.db')
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-questionData = pd.read_csv("ques_data.csv")
-print questionData
+questionData = pd.read_csv("ques_mode(4).csv")
+print(questionData)
 for i in questionData.index:
     question = Question()
     question.correct = questionData['correct'][i]
@@ -17,9 +17,12 @@ for i in questionData.index:
     question.wrong2 = questionData['wrong2'][i]
     question.wrong3 = questionData['wrong3'][i]
 
-    question.level = questionData['level'][i]
+    print(type(questionData['age'][i]))
+    #question.level = questionData['level'][i]
     question.age = questionData['age'][i]
-    question.fix = questionData['fix'][i]
-    question.group = questionData['group'][i]
+    question.priority = questionData['priority'][i]
+    question.mode = questionData['mode'][i]
+    #question.fix = questionData['fix'][i]
+    #question.group = questionData['group'][i]
     session.add(question)
     session.commit()
