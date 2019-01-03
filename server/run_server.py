@@ -355,8 +355,9 @@ def sel_test():
             if child.num_word_test == 10 :
                 # 恰好测试完关键词, 更新mode
                 for i in range(0, 5) :
-                    if correct_count <= MODELIST[i]:
+                    if child.correct_count <= MODELIST[i]:
                         child.mode = i
+                        print("child's mode = " + str(i))
                         break
                 questions = []
                 for i in range(0, 5) :
