@@ -151,7 +151,7 @@ def newWordTestQuestionID(childID):
         # 进入关键词测试
         mode = child.num_word_test // 2 + 1
         print(mode)
-        questions = session.query(Question).filter_by(mode=mode)
+        questions = session.query(Question).filter_by(mode=mode).all()
         print(questions)
         #return 1, 0
 
