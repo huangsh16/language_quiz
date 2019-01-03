@@ -19,10 +19,7 @@ class Question(Base):
     wrong1 = Column(String(15), nullable=False)
     wrong2 = Column(String(15), nullable=False)
     wrong3 = Column(String(15), nullable=False)
-    #level = Column(Integer, nullable=False)
     age = Column(Integer, nullable=False)
-    #fix = Column(Integer, nullable=False)
-    #group = Column(Integer, nullable=False)
     priority = Column(Integer, nullable=False)
     mode = Column(Integer, nullable=False)
     times_used = Column(Integer)
@@ -61,16 +58,6 @@ class Child(Base):
     edu6 = Column(Integer)
     edu7 = Column(Integer)
     time_info = Column(String(10))
-
-    #level = Column(Integer)
-
-    # 上一个选择是否正确,正确为1,错误为-1,不存在为0
-    #last = Column(Integer)
-    # 上上一个选择是否正确
-    #llast = Column(Integer)
-
-    # 目前最后回答的题目的group，用于产生新题
-    #lgroup = Column(Integer)
 
     # 上次回答的问题
     last_question = Column(Integer)
@@ -121,12 +108,8 @@ class Child(Base):
 
     def __init__(self):
         self.num_ans = 0
-        #self.level = 1
-        #self.last = 0
-        #self.llast = 0
         self.num_word_test = 0
         self.correct_count = 0
-        #self.lgroup = 0
         self.mode = -1
         self.last_question = -1
         self.chance = 1

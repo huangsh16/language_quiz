@@ -111,31 +111,6 @@ def newWordTestQuestionID(childID):
     # 数据库查这个孩子
     child = session.query(Child).filter_by(id=childID).one()
 
-    #print "newWordTestQuestionID"
-
-    # 更新这个孩子的下题的level
-    '''
-    if child.last + child.llast == 2:
-        # 升级
-        child.level = min(child.level + 1, MAXLEVEL)
-
-        # 清空最近题目的缓存
-        child.last = 0
-        child.llast = 0
-
-    elif child.last + child.llast == -2:
-        # 降级
-        child.level = max(child.level - 1, MINLEVEL)
-
-        # 清空最近题目的缓存
-        child.last = 0
-        child.llast = 0
-
-    session.add(child)
-    session.commit()
-    ### 此后只访问，不更新数据库 ###
-    '''
-
     # 数据库查该孩子的答题记录
     records = session.query(WordTest).filter_by(childID=childID)
 
@@ -145,16 +120,12 @@ def newWordTestQuestionID(childID):
     for record in records:
         num_ans = num_ans + 1
 
-    #print(child.num_word_test, child.num_word_test // 2 + 1)
-
     if child.num_word_test < 10 :
         # 进入关键词测试
         mode = child.num_word_test // 2 + 1
-        #print(mode)
         questions = session.query(Question).filter_by(mode=mode, priority=1).all()
-        #print(questions)
-        #return 1, 0
 
+        # 不重复测试
         question = random.choice(questions)
         while question.id == child.last_question :
             question = random.choice(questions)
@@ -183,58 +154,6 @@ def newWordTestQuestionID(childID):
             return child.Q8, num_ans
         elif child.num_word_test == 19 :
             return child.Q9, num_ans
-
-
-
-
-
-    # 找出目标级别答过的题
-    '''
-    questionIDs_answered_this_level = []
-    for record in records:
-        num_ans = num_ans + 1
-        question = session.query(Question).filter_by(id=record.questionID).one()
-        if question.level == child.level:
-            questionIDs_answered_this_level = questionIDs_answered_this_level + [question.id]
-    # 该级别已经回答过的题目数量
-    num_answered_this_level = len(questionIDs_answered_this_level)
-
-    # 先调出不考虑是否作答的所有题目
-    if num_answered_this_level < FIX_NUM:
-        # 同级别题中固定题
-
-        if num_answered_this_level == 1:
-            # 刚回答过一个时，下一个要给出group不同的
-            questions = session.query(Question).filter_by(level=child.level, fix=1, group=1 - child.lgroup)
-        else:
-            # 除此之外无需考虑group的问题
-            questions = session.query(Question).filter_by(level=child.level, fix=1)
-    else:
-        # 所有同级别题
-        questions = session.query(Question).filter_by(level=child.level)
-
-    # 转换成题号
-    questionIDs = []
-    for question in questions:
-        questionIDs = questionIDs + [question.id]
-
-    # 可行题，做集合减，除去已经答的
-    questionIDs_to_answer = list(set(questionIDs) - set(questionIDs_answered_this_level))
-
-    # 查一下这些题的权重
-    weights = []
-    for questionID in questionIDs_to_answer:
-        # 效率有点低
-        question = session.query(Question).filter_by(id=questionID).one()
-        times_used = question.times_used
-        weights = weights + [func_weight(times_used)]
-
-    # 轮盘赌
-    questionID = func_roulette(questionIDs_to_answer, weights)
-
-    return questionID, num_ans
-    '''
-
 
 
 # 提交信息，返回单词测试说明页，为远端分配childID
@@ -342,12 +261,8 @@ def sel_test():
 
         if addTestResult(WordTest, childID, questionID, answer, time) == 1:
             # 如果合法
-            # 更新该child已回答的数量， 近两次回答是否正确
-            # last是上次，llast是上上次，1是正确，-1是错误
+            # 更新该child已回答的数量，回答正确的数量，上次回答的题目
             child.num_word_test = child.num_word_test + 1
-            #child.llast = child.last
-            #child.last = 1 if answer == question.correct else -1
-            #child.lgroup = question.group
             if answer == question.correct :
                 child.correct_count += 1
             child.last_question = question.id
@@ -359,6 +274,7 @@ def sel_test():
                         child.mode = i
                         print("child's mode = " + str(i + 1))
                         break
+                # 随机出后10道题
                 questions = []
                 for i in range(0, 5) :
                     questions.extend(random.sample(session.query(Question).filter_by(mode = i + 1, priority = 0).all(), QCHOICE[child.mode][i]))
@@ -379,7 +295,6 @@ def sel_test():
             print('wordtest: childID:{}, questionID:{}, correct:{}, answer:{}, time:{}, num_ans:{}'.format(
                 childID,
                 questionID,
-                #question.level,
                 question.correct,
                 answer,
                 time,

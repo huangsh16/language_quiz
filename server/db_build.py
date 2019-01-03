@@ -17,12 +17,8 @@ for i in questionData.index:
     question.wrong2 = questionData['wrong2'][i]
     question.wrong3 = questionData['wrong3'][i]
 
-    #print(type(questionData['age'][i]))
-    #question.level = questionData['level'][i]
     question.age = questionData['age'][i]
     question.priority = questionData['priority'][i]
     question.mode = questionData['mode'][i]
-    #question.fix = questionData['fix'][i]
-    #question.group = questionData['group'][i]
     session.add(question)
     session.commit()
