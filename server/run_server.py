@@ -357,7 +357,7 @@ def sel_test():
                 for i in range(0, 5) :
                     if child.correct_count <= MODELIST[i]:
                         child.mode = i
-                        print("child's mode = " + str(i))
+                        print("child's mode = " + str(i + 1))
                         break
                 questions = []
                 for i in range(0, 5) :
@@ -459,8 +459,8 @@ def sel_result():
             # 更新question计数
             question.times_used = question.times_used + 1
 
-            print('wordtest: childID:{}, questionID:{}, level:{}, correct:{}, answer:{}, num_ans:{}'.format(
-                childID, questionID, question.level, question.correct, answer, num_ans))
+            print('wordtest: childID:{}, questionID:{}, correct:{}, answer:{}, num_ans:{}'.format(
+                childID, questionID, question.correct, answer, num_ans))
 
             # 结束标志
             if num_ans != NUMWORDTEST:
