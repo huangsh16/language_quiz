@@ -17,7 +17,7 @@ for i in questionData.index:
     question.wrong2 = questionData['wrong2'][i]
     question.wrong3 = questionData['wrong3'][i]
 
-    print(type(questionData['age'][i]))
+    #print(type(questionData['age'][i]))
     #question.level = questionData['level'][i]
     question.age = questionData['age'][i]
     question.priority = questionData['priority'][i]

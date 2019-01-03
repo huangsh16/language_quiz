@@ -27,7 +27,7 @@ RAVEN_LETTER = ['', 'A1', 'A5', 'A6', 'A7', 'A11', 'A12', 'B5', 'B12']
 MINMEMORY = 3
 MAXMEMORY = 16
 
-MODELIST = [1, 3, 6, 8, 10] 
+MODELIST = [1, 3, 6, 8, 10]
 QCHOICE = [ [4, 3, 2, 1, 0],
             [3, 3, 2, 1, 1],
             [2, 2, 2, 2, 2],
@@ -144,21 +144,21 @@ def newWordTestQuestionID(childID):
 
     for record in records:
         num_ans = num_ans + 1
-    
+
     print(child.num_word_test, child.num_word_test // 2 + 1)
 
     if child.num_word_test < 10 :
-        # 进入关键词测试 
+        # 进入关键词测试
         mode = child.num_word_test // 2 + 1
         print(mode)
         questions = session.query(Question)
         print(questions)
-        return 1, 0
-        
+        #return 1, 0
+
         question = random.choice(questions)
         while question.id == child.last_question :
             question = random.choice(questions)
-        
+
         return question.id, num_ans
 
     else :
@@ -183,7 +183,7 @@ def newWordTestQuestionID(childID):
             return child.Q8, num_ans
         elif child.num_word_test == 19 :
             return child.Q9, num_ans
-            
+
 
 
 
@@ -234,7 +234,7 @@ def newWordTestQuestionID(childID):
 
     return questionID, num_ans
     '''
-    
+
 
 
 # 提交信息，返回单词测试说明页，为远端分配childID
@@ -359,7 +359,7 @@ def sel_test():
                         child.mode = i
                         break
                 questions = []
-                for i in range(0, 5) : 
+                for i in range(0, 5) :
                     questions.extend(random.sample(session.query(Question).filter_by(mode = i + 1).one(), QCHOICE[child.mode][i]))
                 child.Q0 = questions[0].id
                 child.Q1 = questions[1].id
