@@ -111,7 +111,7 @@ def newWordTestQuestionID(childID):
     # 数据库查这个孩子
     child = session.query(Child).filter_by(id=childID).one()
 
-    print "newWordTestQuestionID"
+    #print "newWordTestQuestionID"
 
     # 更新这个孩子的下题的level
     '''
@@ -145,14 +145,14 @@ def newWordTestQuestionID(childID):
     for record in records:
         num_ans = num_ans + 1
 
-    print(child.num_word_test, child.num_word_test // 2 + 1)
+    #print(child.num_word_test, child.num_word_test // 2 + 1)
 
     if child.num_word_test < 10 :
         # 进入关键词测试
         mode = child.num_word_test // 2 + 1
-        print(mode)
-        questions = session.query(Question).filter_by(mode=mode).all()
-        print(questions)
+        #print(mode)
+        questions = session.query(Question).filter_by(mode=mode, priority=1).all()
+        #print(questions)
         #return 1, 0
 
         question = random.choice(questions)
@@ -360,7 +360,7 @@ def sel_test():
                         break
                 questions = []
                 for i in range(0, 5) :
-                    questions.extend(random.sample(session.query(Question).filter_by(mode = i + 1).one(), QCHOICE[child.mode][i]))
+                    questions.extend(random.sample(session.query(Question).filter_by(mode = i + 1, priority = 0).all(), QCHOICE[child.mode][i]))
                 child.Q0 = questions[0].id
                 child.Q1 = questions[1].id
                 child.Q2 = questions[2].id
