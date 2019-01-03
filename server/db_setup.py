@@ -39,8 +39,9 @@ class Question(Base):
             'wrong1': self.wrong1,
             'wrong2': self.wrong2,
             'wrong3': self.wrong3,
-            #'level': self.level
-
+            'age': self.age,
+            'priority' : self.priority,
+            'mode': self.mode,
         }
 
 
@@ -179,5 +180,3 @@ class MemoryTest(Base):
 engine = create_engine('sqlite:///language_data.db')
 #engine = create_engine('postgresql+psycopg2://openpg:openpgpwd@localhost:22/testdb',echo=True)
 Base.metadata.create_all(engine)
-
-
